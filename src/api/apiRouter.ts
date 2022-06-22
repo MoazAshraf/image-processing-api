@@ -6,7 +6,12 @@ import resizeOrCached from '../img-processing/resize';
 const apiRouter = Router();
 
 apiRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    if (!('filename' in req.query)) {
+    if (Object.keys(req.query).length === 0) {
+        res.status(200);
+        res.send(
+            'Welcome to the API. Required params: filename, width, height.'
+        );
+    } else if (!('filename' in req.query)) {
         res.status(400);
         res.send('"filename" query param missing from URL.');
     } else if (!('width' in req.query)) {

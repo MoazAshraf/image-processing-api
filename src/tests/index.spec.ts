@@ -8,12 +8,10 @@ import resizeOrCached from '../img-processing/resize';
 describe('GET /api', () => {
     const request = supertest(app);
 
-    it('Expect GET /api to return 400; missing filename', async () => {
+    it('Expect GET /api to return 200; Welcome', async () => {
         const response = await request.get('/api');
-        expect(response.status).toBe(400);
-        expect(
-            response.text.startsWith('"filename" query param missing')
-        ).toBeTrue();
+        expect(response.status).toBe(200);
+        expect(response.text.startsWith('Welcome to the API.')).toBeTrue();
     });
 
     it('Expect GET /api?filename=fjord.jpg to return 400; missing width', async () => {
