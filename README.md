@@ -44,3 +44,6 @@ Currently, this is the only endpoint in the project.
 ```
 GET /api?filename=fjord.jpg&width=400&height=400
 ```
+
+## Copyrights
+- All images were obtained from https://github.com/udacity/nd-0067-c1-building-a-server-project-starter
