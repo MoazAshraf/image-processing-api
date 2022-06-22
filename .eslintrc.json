@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jasmine": true
     },
     "extends": [
         "airbnb-base",
@@ -14,10 +15,12 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "prettier"
+        "prettier",
+        "jasmine"
     ],
     "rules": {
         "no-console": 1,        // Warning
         "prettier/prettier": 1  // Warning
-    }
+    },
+    "ignorePatterns": ["src/tests/helpers"]
 }
