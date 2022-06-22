@@ -12,7 +12,7 @@ export default async (
 ) => {
     try {
         // File exists
-        await fs.stat(outputPath);
+        await fs.access(outputPath);
     } catch (err) {
         // File doesn't exist
         await fs.mkdir(path.dirname(outputPath), { recursive: true });

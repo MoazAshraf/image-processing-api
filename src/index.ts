@@ -1,6 +1,6 @@
 import express from 'express';
 import logging from 'morgan';
-import routes from './routes/routes';
+import routes from './routes';
 
 const port = 8086;
 const host = 'localhost';
