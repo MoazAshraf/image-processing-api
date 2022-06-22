@@ -9,7 +9,7 @@ export default async (
     outputPath: string,
     width: number,
     height: number
-) => {
+): Promise<void> => {
     try {
         // Output file exists, do nothing (image is already resized)
         await fs.access(outputPath);
