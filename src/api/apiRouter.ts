@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from 'express';
 import path from 'path';
 import { promises as fs } from 'fs';
+import { Router, Request, Response, NextFunction } from 'express';
 import resizeOrCached from '../img-processing/resize';
 
 const apiRouter = Router();
