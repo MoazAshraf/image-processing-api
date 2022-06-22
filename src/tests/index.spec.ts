@@ -3,7 +3,8 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import sharp from 'sharp';
 import app from '../index';
-import resizeOrCached from '../img-processing/resize';
+import resize from '../img-processing/resize';
+import fileExists from '../util';
 
 describe('GET /api', (): void => {
     const request = supertest(app);
@@ -56,15 +57,12 @@ describe('Resize image', async (): Promise<void> => {
 
     beforeEach(async (): Promise<void> => {
         // Remove the file first if it exists
-        try {
-            await fs.unlink(outputPath);
-        } catch (err) {
-            // File already exists
-        }
+        if (await fileExists(outputPath)) await fs.unlink(outputPath);
+        else await fs.mkdir(path.dirname(outputPath), { recursive: true });
     });
 
     it('Resize full/fjord.jpg to 400x400', async (): Promise<void> => {
-        await resizeOrCached(inputPath, outputPath, 400, 400);
+        await resize(inputPath, outputPath, 400, 400);
         await expectAsync(fs.access(outputPath)).toBeResolved();
         const metadata = await sharp(outputPath).metadata();
         expect(metadata.width).toBe(400);

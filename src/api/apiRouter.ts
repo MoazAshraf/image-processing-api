@@ -1,7 +1,8 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import { Router, Request, Response, NextFunction } from 'express';
-import resizeOrCached from '../img-processing/resize';
+import resize from '../img-processing/resize';
+import fileExists from '../util';
 
 const apiRouter = Router();
 
@@ -26,8 +27,7 @@ apiRouter.get(
             const filename = req.query.filename as unknown as string;
             const inputPath = path.join(__dirname, '..', 'full', filename);
 
-            try {
-                await fs.access(inputPath);
+            if (await fileExists(inputPath)) {
                 const [filenameNoExt, ext] = filename.split('.');
                 const widthStr = req.query.width as unknown as string;
                 const width = parseInt(widthStr, 10);
@@ -47,7 +47,16 @@ apiRouter.get(
                         `${filenameNoExt}_${width}_${height}.${ext}`
                     );
 
-                    await resizeOrCached(inputPath, outputPath, width, height);
+                    // Resize image first if file doesn't exist
+                    if (!(await fileExists(outputPath))) {
+                        // Create the output file's parent directory
+                        await fs.mkdir(path.dirname(outputPath), {
+                            recursive: true
+                        });
+                        // Resize the image
+                        await resize(inputPath, outputPath, width, height);
+                    }
+                    // Send the resized image in the response
                     res.status(200);
                     res.sendFile(outputPath, (err) => {
                         if (err) {
@@ -59,10 +68,9 @@ apiRouter.get(
                         }
                     });
                 }
-            } catch (err) {
+            } else {
                 res.status(404);
                 res.send(`File not found "${inputPath}".`);
-                next(err);
             }
         }
     }
