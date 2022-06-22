@@ -11,10 +11,10 @@ export default async (
     height: number
 ) => {
     try {
-        // File exists
+        // Output file exists, do nothing (image is already resized)
         await fs.access(outputPath);
     } catch (err) {
-        // File doesn't exist
+        // Output file doesn't exist, resize the image
         await fs.mkdir(path.dirname(outputPath), { recursive: true });
         await sharp(inputPath).resize(width, height).toFile(outputPath);
     }
